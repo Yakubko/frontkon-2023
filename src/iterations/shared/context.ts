@@ -18,21 +18,24 @@ export function useAddNotification(): LanguageContextValue['addNotification'] {
 }
 
 export function useContextValue(): LanguageContextValue {
-  const timersRef = React.useRef<Record<string, NodeJS.Timeout>>({});
+  const timersRef = useTimerCleaner();
   const [notifications, setNotification] = React.useState<Notification[]>([]);
 
-  const value: LanguageContextValue = {
-    notifications,
-    addNotification: (notification) => {
-      const newNotification: Notification = { id: Date.now(), text: notification };
+  const addNotification: LanguageContextValue['addNotification'] = (notification) => {
+    const newNotification: Notification = { id: Date.now(), text: notification };
 
-      setNotification([...notifications, newNotification]);
-      timersRef.current[newNotification.id] = setTimeout(() => {
-        delete timersRef.current[newNotification.id];
-        setNotification((current) => current.filter(({ id }) => id !== newNotification.id));
-      }, 2 * 1000);
-    },
+    setNotification([...notifications, newNotification]);
+    timersRef.current[newNotification.id] = setTimeout(() => {
+      delete timersRef.current[newNotification.id];
+      setNotification((current) => current.filter(({ id }) => id !== newNotification.id));
+    }, 2 * 1000);
   };
+
+  return { notifications, addNotification };
+}
+
+function useTimerCleaner(): React.MutableRefObject<Record<string, NodeJS.Timeout>> {
+  const timersRef = React.useRef<Record<string, NodeJS.Timeout>>({});
 
   // Clear all timeouts on un-mount
   React.useEffect(
@@ -42,5 +45,5 @@ export function useContextValue(): LanguageContextValue {
     [],
   );
 
-  return value;
+  return timersRef;
 }
