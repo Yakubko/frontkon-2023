@@ -17,7 +17,12 @@ export function NotificationsTile(): React.ReactElement {
 function AddNotification(): React.ReactElement {
   const addNotification = useAddNotification();
 
-  return <button onClick={() => addNotification(`${Date.now()}`)}>Add notification</button>;
+  return (
+    <>
+      <button onClick={() => addNotification(`${Date.now()}`)}>Add notification</button>
+      <input placeholder='Notification value' disabled />
+    </>
+  );
 }
 
 function NotificationList(): React.ReactElement {
