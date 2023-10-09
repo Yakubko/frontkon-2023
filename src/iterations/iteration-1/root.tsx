@@ -5,10 +5,10 @@ import { App } from '../../app';
 import { LanguageContext, useContextValue } from '../shared';
 
 export function Root(): React.ReactElement {
-  const value = useContextValue();
+  const { notifications, addNotification } = useContextValue();
 
   return (
-    <LanguageContext.Provider value={value}>
+    <LanguageContext.Provider value={{ notifications, addNotification }}>
       <App />
     </LanguageContext.Provider>
   );

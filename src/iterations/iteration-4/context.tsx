@@ -3,18 +3,14 @@ import React from 'react';
 import { useContextValue, type LanguageContextValue } from '../shared';
 
 export const LanguageContext1 = React.createContext<LanguageContextValue['notifications']>([]);
-export const LanguageContext3 = React.createContext<LanguageContextValue['addNotification']>(
-  () => {},
-);
+export const LanguageContext3 = React.createContext<LanguageContextValue['addNotification']>(() => {});
 
 export function NotificationsProvider({ children }: React.PropsWithChildren): React.ReactElement {
-  const value = useContextValue();
+  const { notifications, addNotification } = useContextValue();
 
   return (
-    <LanguageContext1.Provider value={value.notifications}>
-      <LanguageContext3.Provider value={value.addNotification}>
-        {children}
-      </LanguageContext3.Provider>{' '}
+    <LanguageContext1.Provider value={notifications}>
+      <LanguageContext3.Provider value={addNotification}>{children}</LanguageContext3.Provider>{' '}
     </LanguageContext1.Provider>
   );
 }
@@ -29,16 +25,43 @@ export function useAddNotification(): LanguageContextValue['addNotification'] {
 
 // Replace in /shared/context
 /*
-  const addNotification = React.useCallback<LanguageContextValue['addNotification']>(
-    (notification) => {
-      const newNotification: Notification = { id: Date.now(), text: notification };
+type MergeCallback = (newNotification: Notification, notifications: Notification[]) => Notification[];
 
-      setNotification((currentNotifications) => [...currentNotifications, newNotification]);
-      timersRef.current[newNotification.id] = setTimeout(() => {
-        delete timersRef.current[newNotification.id];
-        setNotification((current) => current.filter(({ id }) => id !== newNotification.id));
-      }, 2 * 1000);
-    },
-    [],
-  );
+interface ContextValueProps {
+  mergeCallback: MergeCallback;
+}
+
+const defaultMergeCallback: MergeCallback = (newNotification, currentNotifications) => [...currentNotifications, newNotification];
+
+export function useContextValue(
+  { mergeCallback }: ContextValueProps = { mergeCallback: defaultMergeCallback },
+): LanguageContextValue {
+
+
+// later
+  const mergeCallbackRef = React.useRef(mergeCallback);
+  mergeCallbackRef.current = mergeCallback;
+
+
+
+
+// here
+// const [direction, setDirection] = React.useState<'up' | 'down'>('up');
+
+  // const { notifications, addNotification } = useContextValue({
+  //   mergeCallback: (newNotification, currentNotifications) => {
+  //     const notification = { ...newNotification, text: `${currentNotifications.length}` };
+
+  //     return direction === 'up' ? [...currentNotifications, notification] : [notification, ...currentNotifications];
+  //   },
+  // });
+
+  // React.useEffect(() => {
+  //   if (notifications.length > 2) {
+  //     setDirection('down');
+  //   } else {
+  //     setDirection('up');
+  //   }
+  // }, [notifications]);
+
 */
