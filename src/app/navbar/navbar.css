@@ -1,0 +1,37 @@
+#navbar {
+  margin-top: 16px;
+
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#navbar-breadcrumb {
+  flex: 3;
+
+  box-sizing: border-box;
+  color: rgb(52, 71, 103);
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12px;
+}
+
+#navbar-actions {
+  display: flex;
+  gap: 10px;
+  color: rgb(52, 71, 103);
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  letter-spacing: 0.12px;
+  align-items: center;
+}
+
+#navbar-actions input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: transparent;
+}
