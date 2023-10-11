@@ -13,6 +13,8 @@ export function NotificationBadgeWrapper({ renderItem }: NotificationBadgeWrappe
 
 // Replace in app/navigation/item-list for notification item
 // <NotificationBadgeWrapper renderItem={(props) => <Item {...props} title='Notifications' />} />
+// Replace in app/navbar/navbar for notification item
+// <NotificationBadgeWrapper renderItem={({badge}) => <div>Notification ({badge})</div>} />
 
 export function NetworkBadgeWrapper({ renderItem }: NotificationBadgeWrapperProps): React.ReactElement {
   const [badge, setBadge] = React.useState(-1);

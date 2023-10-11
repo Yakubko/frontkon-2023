@@ -25,7 +25,7 @@ export function useAddNotification(): LanguageContextValue['addNotification'] {
 
 // Replace in /shared/context
 /*
-type MergeCallback = (newNotification: Notification, notifications: Notification[]) => Notification[];
+export type MergeCallback = (newNotification: Notification, notifications: Notification[]) => Notification[];
 
 interface ContextValueProps {
   mergeCallback: MergeCallback;
@@ -38,30 +38,36 @@ export function useContextValue(
 ): LanguageContextValue {
 
 
-// later
-  const mergeCallbackRef = React.useRef(mergeCallback);
-  mergeCallbackRef.current = mergeCallback;
-
-
-
+// In addNotification
+setNotification((currentNotifications) => mergeCallback(newNotification, currentNotifications));
 
 // here
-// const [direction, setDirection] = React.useState<'up' | 'down'>('up');
+const [direction, setDirection] = React.useState<'up' | 'down'>('up');
 
-  // const { notifications, addNotification } = useContextValue({
-  //   mergeCallback: (newNotification, currentNotifications) => {
-  //     const notification = { ...newNotification, text: `${currentNotifications.length}` };
+const mergeCallback: MergeCallback = (newNotification, currentNotifications) => {
+const notification = { ...newNotification, text: `${currentNotifications.length}` };
 
-  //     return direction === 'up' ? [...currentNotifications, notification] : [notification, ...currentNotifications];
-  //   },
-  // });
+return direction === 'up' ? [...currentNotifications, notification] : [notification, ...currentNotifications];
+};
 
-  // React.useEffect(() => {
-  //   if (notifications.length > 2) {
-  //     setDirection('down');
-  //   } else {
-  //     setDirection('up');
-  //   }
-  // }, [notifications]);
+const { notifications, addNotification } = useContextValue({ mergeCallback });
+
+React.useEffect(() => {
+if (notifications.length > 2) {
+  setDirection('down');
+} else {
+  setDirection('up');
+}
+}, [notifications]);
+
+
+// callback
+
+const mergeCallback = React.useCallback<MergeCallback>((newNotification, currentNotifications) => {
+
+// later
+
+const mergeCallbackRef = React.useRef(mergeCallback);
+mergeCallbackRef.current = mergeCallback;
 
 */
